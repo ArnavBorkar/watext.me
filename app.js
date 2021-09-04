@@ -17,6 +17,7 @@ app.get("/", (req, res, next) => {
     } else {
       res.json({
         subdomain,
+        smtg:domain[1],
         error: isMobilePhone(subdomain),
       });
     }
@@ -24,6 +25,10 @@ app.get("/", (req, res, next) => {
     servePage(res, next, "landing.html");
   }
 });
+
+// app.get('/<ROUTE_NAME>', (req, res) => {
+//   servePage(res, next, "<FILE_NAME>.html");
+// })
 
 app.use((err, req, res, next) => {
   console.log(err.message);
