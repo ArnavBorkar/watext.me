@@ -1,6 +1,6 @@
 const express = require("express");
 const { isMobilePhone } = require("validator");
-const servePage = require("./uti/servePage");
+const servePage = require("./util/servePage");
 const morgan = require("morgan");
 
 const app = express();
@@ -15,7 +15,10 @@ app.get("/", (req, res, next) => {
     if (isMobilePhone(subdomain)) {
       res.redirect(`http://wa.me/+91${subdomain}`);
     } else {
-      servePage(res, next, "error.html");
+      res.json({
+        subdomain,
+        error: isMobilePhone(subdomain),
+      });
     }
   } else {
     servePage(res, next, "landing.html");
