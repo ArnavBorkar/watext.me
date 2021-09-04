@@ -1,6 +1,6 @@
 const express = require("express");
 const { isMobilePhone } = require("validator");
-const servePage = require("./util/servePage");
+const { servePage, serveFavicon } = require("./util/servePage");
 const morgan = require("morgan");
 
 const app = express();
@@ -15,15 +15,16 @@ app.get("/", (req, res, next) => {
     if (isMobilePhone(subdomain)) {
       res.redirect(`http://wa.me/+91${subdomain}`);
     } else {
-      res.json({
-        subdomain,
-        smtg:domain[1],
-        error: isMobilePhone(subdomain),
-      });
+      console.log(domain);
+      servePage(res, next, "error.html");
     }
   } else {
     servePage(res, next, "landing.html");
   }
+});
+
+app.get("/favicon.ico", (req, res, next) => {
+  serveFavicon(res, next, "favicon.ico");
 });
 
 // app.get('/<ROUTE_NAME>', (req, res) => {
@@ -32,6 +33,7 @@ app.get("/", (req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.log(err.message);
+  res.json({ error: err.message });
 });
 
 const PORT = process.env.PORT || 8000;
